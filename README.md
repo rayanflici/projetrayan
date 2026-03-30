@@ -7,10 +7,10 @@ Les définitions précises ainsi que certains théorèmes présentés dans ce ra
 
 # OBJECTIF DE CE PROJET 
 
-Implémenter en Python la formule de Taylor et les développements limités  
-Utiliser des programmes pour analyser le comportement des polynômes de Taylor et des restes associés  
-Étudier des fonctions usuelles à travers leurs approximations locales  
-Mettre en lien les concepts théoriques et leur application informatique  
+-Implémenter en Python la formule de Taylor et les développements limités  
+-Utiliser des programmes pour analyser le comportement des polynômes de Taylor et des restes associés  
+-Étudier des fonctions usuelles à travers leurs approximations locales  
+-Mettre en lien les concepts théoriques et leur application informatique  
 
 # ORGANISATION DU PROJET 
 
