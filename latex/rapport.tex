@@ -1,0 +1,390 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{preambule}
+\usepackage{lipsum} 
+
+\begin{document}
+
+\titre{\textbf{Rapport : Les développements limités}}
+
+\section{Introduction}
+
+\textbf{Présentation du projet : } \\
+Ce projet fait suite à une séance au Club Parimaths sur "Développement limités, ou l'art de simplifier les calculs de limites (Olivier HENRY)". \\
+Il m'est naturellement venu à l'idée d'étudier les développement limités et la formule de Taylor. Il s'inscrit donc dans une démarche d'approfondissement des notions d'analyse vues durant cette séance. \\
+Les définitions précises ainsi que certains théorèmes présentés dans ce rapport sont inspirés du polycopié de \textbf{Alain Troesch}, et de la séance \textbf{Parimaths}.
+
+\section{Comprendre la formule de Taylor et les développements limités (Partie purement mathématique)}
+
+\subsection{Définition d’un développement limité}
+\definition{Définition d’un développement limité}{
+    Énoncé : Soit f une fonction définie sur un voisinage de $x_0$. On dit que le polynôme $P_n \in \mathbf{R_n}$ est un développement limité à l’ordre n de f en $x_0$ si, au voisinage de $x_0$ : 
+    $$f(x)\xrightarrow[x \to x_0]{}P_n(x)+o\big((x - x_0)^n\big).$$}{}
+
+\subsection{Formule de Taylor}
+\thm{Formule de Taylor}{\\
+    Énoncé : Soit $I$ un intervalle ouvert de $\in\mathbf{R}$, $x_0$ \in I et $f : I \xrightarrow{} \mathbf{R}$ une fonction de classe $C_n$ au voisinage de $x_0$.
+
+Alors, au voisinage de $x_0$ : $$f(x)\xrightarrow[x \to x_0]{}\displaystyle\sum_{k=0}^{n} \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k + o\big((x - x_0)^n\big).$$} {}
+
+
+\subsection{Le terme de reste}
+\definition{Reste de Taylor à l’ordre n}
+{Énoncé : Si f admet en $x_0$ une dérivée d'ordre n, on note $R_n$ la différence entre $f$
+et son développement de Taylor, \\
+Alors au voisinage de $x_0$ : 
+$$R_n = f(x) - \displaystyle\sum_{k=0}^{n} \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k $$
+}{}
+
+\subsection{Développements limités usuels}
+\thm{DL des fonctions usuelles}{
+Lorsque x est au voisinage de 0 : 
+
+$$\exp{x}\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{x^k}{k!}+o\big(x^n\big)$$
+$$\ln(1+x)\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{(-1)^{k-1}x^k}{k}+o\big(x^n\big)$$
+$$\sin{x}\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{(-1)^kx^{2k+1}}{(2k+1)!}+o\big(x^{2n+2}\big)$$
+$$\cos{x}\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{(-1)^kx^{2k}}{(2k)!}+o\big(x^{2n+1}\big)$$
+}{}
+
+\section{Implémentation informatique}
+
+\subsection{Objectif du programme :}
+
+L’objectif du programme est d’automatiser le calcul d’un développement limité d’une fonction au voisinage d’un point donné, à l’ordre choisi par l’utilisateur. 
+
+Pour une fonction, un ordre $n$ et un réel $a$, le programme permet de : \\
+-calculer le polynôme de Taylor de $f$ en $a$ à l'ordre $n$, \\
+-tracer graphiquement la fonction et son polynôme d'approximation, \\
+-de déterminer et représenter le reste.\\
+
+\subsection{Organisation du projet : }
+
+Le projet est séparé en différents fichiers permettant de séparer clairement les différentes étapes du raisonnement. \\
+\subsubsection{Fichier taylor.py}
+Il contient la fonction principale qui implémente la formule de Taylor à l’ordre $n$.
+\subsubsection{Fichier dl.py}
+Il regroupe des fonctions spécifiques aux développements limités usuels (exponentielle, logarithme népérien, cosinus, et sinus), afin de simplifier leur utilisation.
+\subsubsection{Fichier composition.py}
+Il permet de calculer le développement limité d'une composée de fonctions, en s'appuyant sur les polynômes de Taylor.
+\subsubsection{Fichier visualisation.py}
+Il assure la partie graphique : il permet de tracer la fonction étudiée, son polynôme d’approximation ainsi que le terme de reste. 
+\subsubsection{Fichier main.py} 
+Il centralise l’exécution du programme et regroupe les différents exemples étudiés.
+\subsubsection{Fichier limite.py}
+Il permet de simplifier le calcul de certaines limites en utilisant les développements limités.
+
+
+\subsection{Méthodes utilisés}
+
+Le projet repose essentiellement sur trois bibliothèques : \\
+-\textbf{sympy}, pour les calculs de dérivées et des polynômes de Taylor. \\
+-\textbf{numpy}, pour l’évaluation numérique des expressions sur un intervalle donné.\\
+-\textbf{matplotlib.pyplot}, pour la visualisation graphique des résultats. \\ \\
+\textbf{Ainsi, le calcul symbolique permet d'obtenir des expressions exactes des développements limités, et le calcul numérique permet leur représentation graphique. }
+
+
+
+
+\section{\textbf{Etude expérimentale : Approximation par développements limités}}
+Le but de cette partie est de réaliser des graphiques, afin d'observer concrètement l'approximation locale, comparer fonctions et polynôme de Taylor, voir l'influence de l'ordre et comprendre le rôle du reste. 
+
+
+\subsection{Exponentielle}
+\textbf{Rappel mathématique : } \\
+\thm{DL exponentielle}{Lorsque x est au voisinage de 0 : 
+
+$$\exp(x)\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{x^k}{k!}+o\big(x^n\big)$$, avec $o\big(x^n\big)$ le reste du développement limité.}{}\\
+
+\textbf{Calcul avec le programme :} \\
+
+Lorsqu'on code : dl.exp(1) dans le ficher \textbf{main.py}, le programme renvoie : $$ 1+x$$
+Lorsqu'on code : dl.exp(3) dans le fichier \textbf{main.py}, le programme renvoie : $$ 1+x+\frac{x^2}{2}+\frac{x^3}{6} $$
+Lorsqu'on code : dl.exp(5) dans le fichier \textbf{main.py}, le programme renvoie : $$1+x+\frac{x^2}{2}+\frac{x^3}{6}+\frac{x^4}{24}+\frac{x^5}{120}$$ \\
+\textbf{Interprétation :} \\
+Plus l’ordre du développement limité est élevé, plus le polynôme obtenu comporte de termes. L’approximation de la fonction par ce polynôme devient alors de plus en plus précise au voisinage du point considéré, ici $0$. \\
+Un développement limité d’ordre $1$ fournit une première approximation très simple de la fonction, correspondant à son comportement le plus immédiat près de $0$. \\
+
+Lorsque l’on augmente l’ordre du développement limité, par exemple à l’ordre $3$, le polynôme obtenu contient davantage d’informations sur la fonction ce qui permet d’obtenir une approximation plus fidèle de la fonction au voisinage de $0$. \\
+
+De manière générale, plus l’ordre du développement limité est grand, plus le polynôme approche finement la fonction dans un voisinage du point étudié. \\
+
+\textbf{Graphique : } \\
+
+Le graphique montre que la courbe de l’exponentielle et celle des polynômes de Taylor coïncident au voisinage de 0. \\
+
+On observe que plus l’ordre du polynôme augmente, plus la courbe du polynôme suit fidèlement celle de la fonction, en particulier près de 0.\\
+
+Cela illustre que le développement limité est une approximation locale fidèle au-dessus de 0, mais l'écart augemente lorsqu'il s'en éloigne.\\
+
+\textbf{Conclusion :} Ainsi, le développement limité fournit une approximation locale efficace de la fonction exponentielle.
+
+
+
+\textbf{Analyse du reste :}\\
+
+\textbf{Rappel mathématique : } \\
+\definition{Reste de Taylor à l’ordre n}
+
+{Énoncé : Si f admet en $x_0$ une dérivée d'ordre n, on note $R_n$ la différence entre $f$
+et son développement de Taylor, \\
+Alors au voisinage de $x_0$ : 
+$$R_n = f(x) - \displaystyle\sum_{k=0}^{n} \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k $$
+}{}
+
+
+Le graphique met en évidence que l’erreur entre la fonction et son polynôme d’approximation devient très faible au voisinage de 0.\\
+
+On observe que cette erreur diminue lorsque l’ordre du développement limité augmente.\\
+
+Cela montre que le reste représente bien l’écart entre la fonction et son approximation, et que cet écart devient négligeable près de 0.
+
+
+\subsubsection{Logarithme népérien}
+\textbf{Rappel mathématique : } \\
+\thm{DL logarithme népérien}{Lorsque x est au voisinage de 0 : 
+$$\ln(1+x)\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{(-1)^{k-1}x^k}{k}+o\big(x^n\big)$$}{}
+\\
+
+
+\textbf{Calcul avec le programme :} \\
+\\
+Lorsqu'on code : dl.ln1p(1) dans le fichier \textbf{main.py}, le programme renvoie : $$x$$ \\
+Lorsqu'on code : dl.ln1p(3) dans le fichier \textbf{main.py}, le programme renvoie : $$x-\frac{x^2}{2}+\frac{x^3}{3}$$ \\
+Lorsqu'on code : dl.ln1p(5) dans le fichier \textbf{main.py}, le programme renvoie : $$x-\frac{x^2}{2}+\frac{x^3}{3}-\frac{x^4}{4}+\frac{x^5}{5}$$ \\
+\textbf{Interprétation :} \\
+
+Plus l’ordre du développement limité est élevé, plus le polynôme obtenu comporte de termes. L’approximation de la fonction par ce polynôme devient alors de plus en plus précise au voisinage du point considéré, ici $0$. \\
+Un développement limité d’ordre $1$ fournit une première approximation très simple de la fonction, correspondant à son comportement le plus immédiat près de $0$. \\
+
+Lorsque l’on augmente l’ordre du développement limité, par exemple à l’ordre $3$, le polynôme obtenu contient davantage d’informations sur la fonction ce qui permet d’obtenir une approximation plus fidèle de la fonction au voisinage de $0$. \\
+
+De manière générale, plus l’ordre du développement limité est grand, plus le polynôme approche finement la fonction dans un voisinage du point étudié. \\
+
+\textbf{Graphique : } \\
+Le graphique permet d’observer que le polynôme de Taylor approxime correctement la fonction $\ln(x+1)$ au voisinage de $0$. \\
+Comme pour l’exponentielle, on constate que : \\
+-plus l’ordre du développement limité est élevé, plus l’approximation est précise, \\
+-les courbes du polynôme et de la fonction coïncident presque au voisinage de 0
+-lorsque l’on s’éloigne de 0, l’écart entre la fonction et son approximation augmente
+
+\textbf{Graphique : } \\
+
+
+\textbf{Analyse du reste :} \\
+On observe que le reste est très proche de 0 au voisinage de 0. \\ \\
+De même, plus l’ordre du développement limité augmente, plus l’erreur diminue.\\ \\
+Lorsque $x$ s’éloigne de 0, l’erreur augmente progressivement. \\ \\
+\textbf{Conclusion :} Ainsi, le développement limité fournit une approximation locale efficace de la fonction logarithme.
+
+
+\subsection{Fonctions trigonométriques}
+\subsubsection{Cosinus :}
+\textbf{Rappel mathématique : } \\
+\thm{DL cosinus}{Lorsque x est au voisinage de 0 : $$\cos{x}\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{(-1)^kx^{2k}}{(2k)!}+o\big(x^{2n+1}\big)$$ }{}
+
+\textbf{Calcul avec le programme :} \\
+\\
+Lorsqu'on code : dl.cos(1) dans le fichier \textbf{main.py}, le programme renvoie : $$1$$ \\
+Lorsqu'on code : dl.cos(3) dans le fichier \textbf{main.py}, le programme renvoie : 
+$$1-\frac{x^2}{2}$$ \\
+Lorsqu'on code : dl.cos(5) dans le fichier \textbf{main.py}, le programme renvoie :
+$$1-\frac{x^2}{2}+\frac{x^4}{24}$$ \\
+\textbf{Interprétation :} \\
+Plus l’ordre du développement limité est élevé, plus le polynôme obtenu comporte de termes. L’approximation de la fonction par ce polynôme devient alors de plus en plus précise au voisinage du point considéré, ici $0$. \\
+Un développement limité d’ordre $1$ fournit une première approximation très simple de la fonction, correspondant à son comportement le plus immédiat près de $0$. \\
+
+Lorsque l’on augmente l’ordre du développement limité, par exemple à l’ordre $3$, le polynôme obtenu contient davantage d’informations sur la fonction ce qui permet d’obtenir une approximation plus fidèle de la fonction au voisinage de $0$. \\
+
+De manière générale, plus l’ordre du développement limité est grand, plus le polynôme approche finement la fonction dans un voisinage du point étudié. \\
+
+\textbf{Graphique :}
+Le graphique permet d’observer que le polynôme de Taylor approxime correctement la fonction $\cos(x)$ au voisinage de $0$. \\
+Comme pour l’exponentielle, on constate que : \\
+-plus l’ordre du développement limité est élevé, plus l’approximation est précise, \\
+-les courbes du polynôme et de la fonction coïncident presque au voisinage de $0$
+-lorsque l’on s’éloigne de 0, l’écart entre la fonction et son approximation augmente
+
+
+\textbf{Analyse du reste :} \\
+GRAPHIQUE RESTE COSINUS\\
+On observe que le reste est très proche de 0 au voisinage de 0. \\ \\
+De même, plus l’ordre du développement limité augmente, plus l’erreur diminue.\\ \\
+Lorsque $x$ s’éloigne de 0, l’erreur augmente progressivement. \\ \\
+\textbf{Conclusion :} Ainsi, le développement limité fournit une approximation locale efficace de la fonction cosinus.
+
+
+\subsubsection{Sinus :}
+\textbf{Rappel mathématique : } \\
+\thm{DL sinus}{Lorsque x est au voisinage de 0 :$$\sin{x}\xrightarrow[x \to 0]{}\displaystyle\sum_{k=0}^{n}\frac{(-1)^kx^{2k+1}}{(2k+1)!}+o\big(x^{2n+2}\big)$$}
+{}
+\textbf{Calcul avec le programme :} \\
+\\
+Lorsqu'on code : dl.sin(1) dans le fichier \textbf{main.py}, le programme renvoie : $$x$$ \\
+Lorsqu'on code : dl.sin(3) dans le fichier \textbf{main.py}, le programme renvoie : 
+$$x-\frac{x^3}{6}$$ \\
+Lorsqu'on code : dl.sin(5) dans le fichier \textbf{main.py}, le programme renvoie :
+$$x-\frac{x^3}{6}+\frac{x^5}{120}$$ \\
+\textbf{Interprétation :} \\
+Plus l’ordre du développement limité est élevé, plus le polynôme obtenu comporte de termes. L’approximation de la fonction par ce polynôme devient alors de plus en plus précise au voisinage du point considéré, ici $0$. \\
+Un développement limité d’ordre $1$ fournit une première approximation très simple de la fonction, correspondant à son comportement le plus immédiat près de $0$. \\
+
+Lorsque l’on augmente l’ordre du développement limité, par exemple à l’ordre $3$, le polynôme obtenu contient davantage d’informations sur la fonction ce qui permet d’obtenir une approximation plus fidèle de la fonction au voisinage de $0$. \\
+
+De manière générale, plus l’ordre du développement limité est grand, plus le polynôme approche finement la fonction dans un voisinage du point étudié. \\
+
+
+\textbf{Graphique :} \\
+Le graphique permet d’observer que le polynôme de Taylor approxime correctement la fonction $\sin(x)$ au voisinage de $0$. \\
+Comme pour l’exponentielle, on constate que : \\
+-plus l’ordre du développement limité est élevé, plus l’approximation est précise, \\
+-les courbes du polynôme et de la fonction coïncident presque au voisinage de $0$
+-lorsque l’on s’éloigne de 0, l’écart entre la fonction et son approximation augmente
+\textbf{Graphique :} \\
+
+
+
+\textbf{Analyse du reste :} \\
+GRAPHIQUE RESTE SINUS\\
+On observe que le reste est très proche de 0 au voisinage de 0. \\ \\
+De même, plus l’ordre du développement limité augmente, plus l’erreur diminue.\\ \\
+Lorsque $x$ s’éloigne de 0, l’erreur augmente progressivement. \\ \\
+\textbf{Conclusion :} Ainsi, le développement limité fournit une approximation locale efficace de la fonction sinus.\\
+
+
+\rmq{DL de fonctions paires et impaires :}{\\
+Soit $f$ une fonction admettant un développement limité au voisinage de $0$.\\
+-si la fonction est \textbf{paire}, alors son développement limité ne contient que des puissances paires de $x$.\\
+-si la fonction est \textbf{impaire}, alors son développement limité ne contient que des puissances impaires de $x$.
+}
+
+
+
+
+\section{Application au calcul de limites}
+\subsection{Principe :}
+Les développements limités permettent de remplacer une fonction compliquée par un polynôme plus simple au voisinage d’un point, généralement au voisinage de $0$. \\
+\definition{Définition d’un développement limité}{
+    Énoncé : Soit f une fonction définie sur un voisinage de $0$. On dit que le polynôme $P_n \in \mathbf{R_n}$ est un développement limité à l’ordre n de f en $0$ si, au voisinage de $0$ : 
+    $$f(x)\xrightarrow[x \to 0]{}P_n(x)+o\big(x^n\big).$$} {}\\
+
+Lorsque l’on calcule une limite, on peut alors remplacer la fonction par son développement limité, ce qui simplifie considérablement les calculs. \\
+
+\subsection{Exemple avec la fonction exponentielle :} 
+Considérons la limite : $$\boxed{\lim_{x \to 0} \frac{\exp(x) - 1}{x}}$$ \\
+En utilisant le développement limité : $\exp(x)-1=x+\frac{x^2}{4}+o\big(x^2\big)$ \\
+On obtient donc : $$\boxed{\frac{\exp(x)-1}{x}=\frac{x+\frac{x^2}{2}+o\big(x^2\big)}{x}}$$ \\
+
+$\Leftrightarrow$
+
+$$\boxed{\frac{\exp(x)-1}{x}=1+\frac{x}{2}+o\big(x\big)}$$ \\
+
+$\Leftrightarrow$
+
+$$\boxed{\lim_{x \to 0} \frac{\exp(x) - 1}{x}} = \lim_{x \to 0} 1+\frac{x}{2}+o\big(x\big)$$ \\
+
+$\Leftrightarrow$ 
+
+$$\boxed{\lim_{x \to 0}\frac{\exp(x)-1}{x}=1}$$ \\ \\
+J'ai pu implémenter sur python dans le fichier \textbf{limite.py} une formule permettant d'automatiser ce genre de calculs de limites sans passer par le taux d'accroissement : $$\boxed{\lim_{x \to 0}\frac{\exp(x)-1}{x}=\lim_{x \to 0}\frac{\exp(x)-\exp(0)}{x-0}}$$ \\
+\textbf{Formule python} : limite.par.dl = sp.limit(dl, x, 0)
+
+
+
+\subsection{Exemple avec la fonction sinus :}
+Considérons la limite : $$\boxed{\lim_{x \to 0} \frac{\sin(x)}{x}}$$ \\
+En utilisant le développement limité : $$\sin(x)=x-\frac{x^3}{6}+o\big(x^3\big)$$ \\
+On obtient donc : $$\boxed{\frac{\sin(x)}{x}=\frac{x-\frac{x^3}{6}+o\big(x^3\big)}{x}}$$\\
+
+$\Leftrightarrow$
+
+$$\boxed{\frac{\sin(x)}{x}=1-\frac{x^2}{6}+o\big(x^2\big)}$$ \\
+
+$\Leftrightarrow$ 
+
+ $$\boxed{\lim_{x \to 0} \frac{\sin(x)}{x} = \lim_{x \to 0} 1-\frac{x^2}{6}+o\big(x^2\big) }$$ \\
+
+$\Leftrightarrow$ 
+
+$$\boxed{\lim_{x \to 0} \frac{\sin(x)}{x} =1}$$ \\
+Comme pour l'exponentielle, j'ai pu implémenter sur python dans le fichier \textbf{limite.py} une formule permettant d'automatiser ce genre de calculs de limites sans passer par le taux d'accroissement : 
+
+$$\boxed{\lim_{x \to 0} \frac{\sin(x)}{x} =\lim_{x \to 0}\frac{\sin(x)-\sin(0)}{x-0}}$$\\
+\textbf{Formule python} : limite.par.dl = sp.limit(dl/x, x, 0) \\
+
+Le programme développé dans ce projet permet de calculer automatiquement les développements limités de certaines fonctions usuelles. \\
+De même, j’ai décidé de programmer un code permettant de calculer des limites, en rappelant que le sujet initial était : \textbf{« Développements limités, ou l’art de simplifier les calculs de limites » (Olivier Henry).}
+
+\section{Composition de développements limités}
+
+\subsection{Principe :}
+Lorsque l’on connaît les développements limités de deux fonctions, il est souvent possible d’obtenir le développement limité de leur composition. \\
+\thm{Composition de DL }{
+Soit $f$ et $g$ des fonctions définies au voisinage de $0$ telles que $f(0)=0$, et soit $n\ge1$. Si $P$ et $Q$ sont des développements limités de $f$ et $g$ en $0$ à l'ordre $n$, alors $T_n(Q\circ P)$ est un DL en $0$ à l'ordre $n$ de $g\circ f$ : \\
+
+($f(x)\xrightarrow[x \to 0]{}P_n(x)+o\big(x^n\big)$ et $g(x)\xrightarrow[x \to 0]{}P_n(x)+o\big(x^n\big)$) \Longrightarrow $(g\circ f)(x)\xrightarrow[x \to 0]{}T_n(Q\circ P)(x)+o\big(x^n\big)$ 
+}{} \\
+
+Par exemple, si l’on connaît le développement limité de $\sin(x)$ à l'ordre $3$: $\sin(x)=x-\frac{x^3}{6}+o\big(x^3\big)$ \\
+On peut en déduire le développement limité de : $\sin(u(x))$, en remplaçant simplement $x$ par $u(x)$. 
+
+\subsection{Exemples :}
+\textit{Dans les exemples suivants, les développements limités sont calculés à l’ordre $3$ au voisinage de $0$.}
+
+\subsubsection{Exemple 1 : $\exp(\sin(x))$}
+On connaît les développements limités de $\sin(x) =x-\frac{x^3}{6}+o\big(x^3\big)$ et de $\exp(x) = 1+x+\frac{x^2}{2}+\frac{x^3}{6}+o\big(x^3\big)$. \\
+On pose $u(x)=\sin(x)$, comme $u(0) = 0$, on peut utiliser le développement limité de l’exponentielle en remplaçant $x$ par $u(x) : \\
+$$$\exp(u(x)) = 1+u(x)+\frac{u(x)^2}{2}+\frac{u(x)^3}{6}+o\big(x^3\big)$$$ \\
+
+$\Leftrightarrow$
+
+$$\exp(\sin(x)) = 1+\sin(x)+\frac{\sin(x)^2}{2}+\frac{\sin(x)^3}{6}+o\big(x^3\big)$$ \\
+Après simplification, on trouve donc : $$\exp(\sin(x)) = 1+x+\frac{x^2}{2}+o\big(x^3\big)$$ \\
+Ainsi, j'ai pu implémenter sur python dans le fichier \textbf{composition.py} une formule permettant d’étudier des fonctions plus complexes, construites à partir de fonctions usuelles. \\
+
+\textbf{Formule python} : dl.result = dl.composition(def.f, def.g, a, n) \\
+
+\subsubsection{Exemple 2 : $\exp(\cos(x)-1)$}
+On connaît les développements limités de $\cos(x) -1 = $$-\frac{x^2}{2}+o\big(x^3\big)$ et de $\exp(x) = 1+x+\frac{x^2}{2}+\frac{x^3}{6}+o\big(x^3\big)$. \\
+On pose $u(x)=\cos(x)$, comme $u(0) = \cos(0)-1=0$, on peut utiliser le développement limité de l’exponentielle en remplaçant $x$ par $u(x) : \\
+$$$\exp(u(x)) = 1+u(x)+\frac{u(x)^2}{2}+\frac{u(x)^3}{6}+o\big((u(x)^3\big)$$$ \\
+
+$\Leftrightarrow$
+
+$$\exp(\cos(x)-1) = 1+(\cos(x)-1)+\frac{(\cos(x)-1)^2}{2}+\frac{(\cos(x)-1)^3}{6}+o\big(x^3\big)$$ \\
+
+$\Leftrightarrow$
+
+$$\exp(\cos(x)-1) = 1+\frac{-x^2}{2}+\frac{(\frac{-x^2}{2})^2}{2}+\frac{(\frac{-x^2}{2})^3}{6+}o\big(x^3\big)$$ 
+
+$\Leftrightarrow$
+
+$$\exp(\cos(x)-1)=1-\frac{-x^2}{2}+o\big(x^3\big)$$ \\
+
+Ainsi, comme pour le premier exemple, j'ai pu implémenter sur python dans le fichier \textbf{composition.py} une formule permettant d’étudier des fonctions plus complexes, construites à partir de fonctions usuelles. \\
+
+\textbf{Formule python } : dl.result = dl.composition(def.f, def.g, a, n) \\
+\rmq{Degré impair}{On remarque que les termes d’ordre impair disparaissent. En effet, le développement de $\cos(x)-1$ commence par un terme en $\frac{x^2}{2}$, ce qui entraîne que les premiers termes du développement de $\exp(\cos(x)-1)$ sont également de degré pair.}
+
+
+\section{Ouverture : Application en physique, approximation des petits angles}
+Les développements limités trouvent des applications directes en physique, notamment dans l’approximation de certains phénomènes. \\
+
+En physique, les développements limités sont très utiles. Ils aident à comprendre certains phénomènes en simplifiant les calculs.\\
+
+Prenons l'exemple des petits angles. Lorsque les angles sont petits, on peut utiliser l'approximation : $$\sin(x) \approx x$$, c'est le développement limité de la fonction sinus à l'ordre 1 au voisinage de 0.\\
+
+Cette approximation est très importante pour étudier les oscillations. Par exemple, elle aide à modéliser le mouvement d'un pendule simple. Grâce à cela, on peut simplifier les équations et trouver des solutions plus facilement.
+
+\textbf{Cela montre que les développements limités ne sont pas juste des outils théoriques. Ils aident vraiment à comprendre les phénomènes physiques.}
+
+
+
+
+
+\section{Conclusion :}
+
+Au cours de ce projet, j’ai pu approfondir la notion de développements limités et mieux comprendre le rôle de la formule de Taylor dans l’approximation locale des fonctions. La partie théorique m’a permis de revoir les définitions mathématiques étudiées lors de la séance ainsi que les développements limités de fonctions usuelles comme l’exponentielle, le logarithme ou les fonctions trigonométriques.
+
+J’ai surtout entrepris ce travail pour explorer le lien entre les mathématiques, la physique et l’informatique. Ce projet a ainsi renforcé mon intérêt pour les mathématiques tout en développant mon goût pour l’approche algorithmique et la programmation. Il a également conforté mon désir de poursuivre des études approfondies en mathématiques, avec l’ambition de m’orienter à terme vers la recherche.
+
+\end{document}
