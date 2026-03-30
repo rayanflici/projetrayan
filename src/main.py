@@ -1,4 +1,4 @@
-import sympy as sp
+import sympy as sp 
 from visualisation import tracer_approximation, tracer_reste
 from composition import dl_composition
 from dl import dl_exp, dl_ln1p, dl_sin, dl_cos
